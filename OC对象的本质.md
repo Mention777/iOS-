@@ -17,10 +17,19 @@ struct NSObject_IMPL {
 //其中Class是一个指向结构体的指针,在64位架构中,占8位字节(32位占4字节)
 
 //若存在成员变量
-struct Person_IMPL {
-      Class isa;
-      int age;
+struct Student_IMPL {
+    Class isa;
+    int _no;
+    int _age;
+};
+
+@interface Student : NSObject
+{
+    @public
+    int _no;
+    int _age;
 }
+@end
 ```
 
 >P.S结构体中第一个元素在内存中的地址就是结构体的地址
@@ -36,9 +45,36 @@ malloc_size((__bridge const void *)person)
 //p.s 将oc对象转换为c语言对象,需要对其进行桥接,及(__bridge C语言类型)变量 的方式
 
 ```
-若存在继承关系,会将父类的属性放在最前边,即父类结构体的实现
 
-ios都为小端模式,读取数据是从高地址开始读取
+若存在继承关系,会将父类的属性放在最前边,即父类结构体的实现
+```objc
+struct Person_IMPL {
+    Class isa;
+    int _age;
+};
+
+@interface Person : NSObject {
+    int _age;
+}
+@end
+
+//若存在继承关系,会将父类的属性放在最前边,即父类结构体的实现
+struct Student_IMPL {
+    Class isa;
+    int _age;
+    int _tall;
+};
+
+@interface Student : Person {
+    int _tall;
+}
+@end
+
+
+```
+
+ios都为小端模式,读取数据是从高地址开始读取</br>
+    即在xcode调试中,内存地址为`01 00 00 00 `时,实际内存地址为`00 00 00 01`
 
 **内存对齐**:结构体的大小必须是最大成员大小的倍数
 
