@@ -15,6 +15,12 @@ struct NSObject_IMPL {
       Class isa;
 }
 //其中Class是一个指向结构体的指针,在64位架构中,占8位字节(32位占4字节)
+
+//若存在成员变量
+struct Person_IMPL {
+      Class isa;
+      int age;
+}
 ```
 
 >P.S结构体中第一个元素在内存中的地址就是结构体的地址
