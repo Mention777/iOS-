@@ -45,7 +45,7 @@ ios都为小端模式,读取数据是从高地址开始读取
 由源码可以看出,`malloc_size`方法本质上调用的是`class_getInstanceSize`的值进行内存分配,即`malloc_size`分配内存的大小与`class_getInstanceSize`是一样的,
 内存分配时,也存在着内存对齐,只是,该内存对齐是16的倍数
 
-**class_getInstanceSize**:实例对象至少需要多少存储空间,与sizeof函数基本相同
+**class_getInstanceSize**:实例对象至少需要多少存储空间,与sizeof函数基本相同</br>
 **malloc_size**:实际分配多少内存
 
 **sizeof**:其实是一个运算符,一编译就会被转换为一个常数,与另外两个函数是有区别的.
