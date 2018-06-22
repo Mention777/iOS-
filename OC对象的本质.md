@@ -15,6 +15,7 @@ struct NSObject_IMPL {
       Class isa;
 }
 //其中Class是一个指向结构体的指针,在64位架构中,占8位字节(32位占4字节)
+//指针占用8位字节,int占用4位字节,long占用8个字节,float占用4个字节,char占用1个字节
 
 //若存在成员变量
 struct Student_IMPL {
