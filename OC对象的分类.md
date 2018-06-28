@@ -47,3 +47,47 @@ OC对象可以分为3种:</br>
 //底层上,会将实例方法或对象方法转换成runtime的objc_msgSend方法,personTest,但具体是对象方法还是类方法是不知道的
 //实际上即为objc_msgSend(person ,@selector(personTest));
 ```
+
+实例对象调用**对象方法**,底层就是给实例对象发送一条消息</br>
+类对象调用**类方法**,底层就是给类对象发送一条消息
+
+### isa指针</br>
+* instance的isa指向class,class的isa指针指向meta-class</br>
+* 当调用对象方法时,通过instance的isa找到class,最后找到对象方法的实现进行调用</br>
+* 当调用类方法时,通过class的isa找到meta-class,最后找到类方法的实现进行调用</br>
+
+### superclass指针</br>
+* 指向父类的类对象,类对象的superclass指向其父类的类对象,原类对象的superclass指向其父类的原类对象</br>
+* 若student继承自person,则student调用person中的对象方法,调用流程是:student的isa指针找到student的类对象,通过该类对象的superclass指针找到person的类对象,调用person的对象方法</br>
+
+### isa、superclass总结</br>
+　1.instance的isa指向class</br>
+　2.class 的isa指向meta-class</br>
+　3.meta-class的isa指向基类的meta-class</br>
+　4.class的superclass指向父类的class,如果没有父类,superclass指针为nil</br>
+　5.meta-class的suerclass指向父类的meta-class，基类的meta-class的superclass指向基类的class</br>
+　6.instance调用对象方法的轨迹：isa找到class,方法不存在,就通过superclass找父类,直到superclass为nil为止</br>
+　7.class调用类方法的轨迹:isa找到meta-class,方法不存在,就通过superclass找父类,直到superclass为nil为止</br>
+
+>最终调用的方法是不知道对象方法还是类方法的,而是通过方法名,因为oc没有很严格地面向对象,发送消息则是寻找isa,再一级一级往上寻找
+
+![](Snip20180620_5.png)
+
+superclass内是直接存储父类的地址值,而isa中的指针需要&一个MASK值才能得到类对象的地址值
+
+![](Snip20180622_11.png)
+
+>若为.m文件,则只能认识oc及c语言,而改成mm文件,则都能识别
+
+### 一些问题总结</br>
+Q1.对象的isa指针指向哪里?</br>
+* instance对象的isa指向class对象</br>
+* class对象的isa指向meta-class对象</br>
+* meta-class对象的isa指向基类的meta-class对象
+
+Q2.OC的类信息存放在哪里>
+* 对象方法、属性、成员变量、协议信息存放在class对象中</br>
+* 类方法存放在meta-class对象中</br>
+* 成员变量的具体值,存放在instance对象</br>
+
+>类与元类对象在程序一开始时就会加载进内存中,当需要使用时,调用load方法使用
