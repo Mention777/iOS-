@@ -82,6 +82,20 @@ ro中的数组为一维数组,里面就是method_t类型,另外两个依次类�
 
 >两者的结合:类一开始声明的属性和方法,协议等初始信息,存储在class_ro_t中对应的baseMethodList,baseProtocols,baseProperties中,在程序运行时,再将分类中的方法,协议等信息重新组合,成class_rw_t对应的二维数组,即class_rw_t中部分信息是从class_ro_t中来的
 
+#### 方法method_t</br>
+* 每个方法最终都是一个method_t,method_t是对方法/函数的封装</br>
+* 定义:</br>
+
+```objc
+struct method_t{
+    SEL name; //函数名
+    const char *types; //编码(返回值类型、参数类型)
+    IMP imp; //指向函数的指针(函数地址)
+};
+```
+* 各参数具体含义:</br>
+IMP:代表函数的具体实现(也就是函数的地址)</br>
+SEL:代表方法/函数名,一般叫选择器,底层结构和`char*`类似,也就是C语言的字符串,说白了就是一个名字</br>
 
 * 原类对象是一种特殊的类对象,只是里面存储的只有类方法
 * 
