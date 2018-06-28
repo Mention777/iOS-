@@ -205,6 +205,7 @@ struct method_t {
 //若方法签名返回空,则不会来到forwardInvocation方法了
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {
     if (aSelector == @selector(test:)) {
+    
         //返回的方法签名决定了invocation的包装的参数和返回值等信息
         //参数的顺序:receiver、selector、other arguments
         return [NSMethodSignature signatureWithObjCTypes:"i@:i"];
@@ -218,12 +219,13 @@ struct method_t {
 //NSIvocation封装了一个方法调用,包括:方法调用者(invocation.target)、方法(invocation.selector)、方法参数(invocation getArgument方法);
 //调用方法最终实现实际上是在forwardInvocation方法中
 - (void)forwardInvocation:(NSInvocation *)anInvocation {
+
+    //invoke方法可以令target对象调用对应的方法
     [anInvocation invokeWithTarget:[[MXCat alloc]init]];
     
     int age;
     [anInvocation getReturnValue:&age];
-    //invoke方法可以令target对象调用对应的方法
-    //[anInvocation ibvokeWithTarget:[[MXCat alloc]init]];
+    
     NSLog(@"%d",age);
 }
 ```
