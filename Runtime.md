@@ -96,6 +96,24 @@ struct method_t{
 * 各参数具体含义:</br>
 IMP:代表函数的具体实现(也就是函数的地址)</br>
 SEL:代表方法/函数名,一般叫选择器,底层结构和`char*`类似,也就是C语言的字符串,说白了就是一个名字</br>
+>1.获取SEL的方式:</br>
+>```objc
+>SEL sel1 = sel_registerName("test");
+>SEL sel2 = @selector(test);
+>```
+>2.可以通过sel_getName()和NSStringFromSelector()转换成字符串</br>
+>3.不同类中相同名字的方法,所对应的方法选择器是相同的,即无论SEL创建多少次,只要SEL的名字相同,该SEL都是相同的
+
+Types:编码</br>
+每个方法例如`-(void)test`,都会默认传递2个参数,即,默认方法就为:`- (void)test:id(self) _cmd:(SEL)_cmd `
+即通过断点可知,对于`- (void)test`方法,types的值为`v16@0:8`,其中,`v`代表`void`返回值类型,`@`代表`id`类型,:代表`SEL`参数,第一个数字16表示全部参数占多少个字节,`id`和`SEL`都是指针,故为16字节,`@0`中的0表示从第几个字节开始,`id`类型的参数是从第0个字节开始的,故为0,后面的数字同理
+
+>Type Encoding:</br>
+iOS提供了一个叫做@encode的指令,可以将具体的类型表示成字符串编码
+
+>对应的类型的encode值如下图,即@encode(id)结果就为@
+![](Snip20180622_14.png)
+
 
 * 原类对象是一种特殊的类对象,只是里面存储的只有类方法
 * 
