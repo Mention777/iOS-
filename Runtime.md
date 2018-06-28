@@ -68,7 +68,7 @@ struct {
 ### Class内部结构</br>
 ![](Snip20180622_11.png)
 
-* 类对象调用data()方法,结果相当就是如下的class_rw_t结构体</br>
+* 类对象调用data()方法,结果相当就是class_rw_t结构体</br>
 
 * class_rw_t里面的methods,properties,protocols是二维数组,是可读可写的,包含了类的初始内容,分类的内容,即类和分类的声明的属性,方法,协议都在里面</br>
 
