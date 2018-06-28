@@ -185,5 +185,60 @@ struct method_t {
 ```
 ![](Snip20180626_4.png)
 
+* 消息转发: 将消息转发给别人</br>
+![](Snip20180626_12.png)
+
+```objc
+//会先调用下面的方法查找有无实现,若实现,则直接将消息转发给return返回的对象
+- (id)forwardingTargetForSelector:(SEL)aSelector {
+    if (aSelector == @selector(test:)) {
+        return [[MXCat alloc]init];
+    }
+    return [super forwardingTargetForSelector:aSelector];
+}
+```
+
+```objc
+//若没有实现forwardingTargetForSelector:(SEL)aSelector方法,则会进入方法签名阶段
+//方法签名:返回值类型、参数类型
+//若方法签名返回空,则不会来到forwardInvocation方法了
+- (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {
+    if (aSelector == @selector(test:)) {
+        //返回的方法签名决定了invocation的包装的参数和返回值等信息
+        //参数的顺序:receiver、selector、other arguments
+        return [NSMethodSignature signatureWithObjCTypes:"i@:i"];
+        
+        //方法签名也可以由已实现方法的对象/类进行生成,即若MJCat对象也同样实现了对应的方法,可以使用MJCat对象生成对应方法签名
+        //return [[[MJCat alloc]init] signatureWithObjCTypes:"i@:i"];
+    }
+    return [super methodSignatureForSelector:aSelector];
+}
+
+//NSIvocation封装了一个方法调用,包括:方法调用者(invocation.target)、方法(invocation.selector)、方法参数(invocation getArgument方法);
+//调用方法最终实现实际上是在forwardInvocation方法中
+- (void)forwardInvocation:(NSInvocation *)anInvocation {
+    [anInvocation invokeWithTarget:[[MXCat alloc]init]];
+    
+    int age;
+    [anInvocation getReturnValue:&age];
+    //invoke方法可以令target对象调用对应的方法
+    //[anInvocation ibvokeWithTarget:[[MXCat alloc]init]];
+    NSLog(@"%d",age);
+}
+```
+* 若是类对象,对应的forwardingTargetForSelector,重签名方法,forwardInvocation方法应该改为+方法,因为从源码可知,这几个方法的调用者为消息接收者
+* forwardingTargetForSelector方法的本质就是objc_msgSend方法,故方法调用只关注消息接收者和SEL,与是否为对象方法还是类方法没有关系
+
+#### @dynamic相关内容</br>
+* 声明属性会帮忙生成get方法和set方法,以及带下划线的成员变量,同时还有set和get方法的实现,至于会自动生成set和get的实现,同时会出现@sycthesize关键字
+
+```objc
+@sycthesize age= _age, height = _height;
+//意义是:为age属性自动生成一个_age的成员变量,及get和set方法的实现
+//后面的版本xcode已经自动帮忙完成
+```
+* @dynamic会提醒编译器不自动生成get和set方法的实现, 不要自动生成成员变量
+* @sycthesize和@dynamic均不影响set和get的声明
+
 * 原类对象是一种特殊的类对象,只是里面存储的只有类方法
 * 
