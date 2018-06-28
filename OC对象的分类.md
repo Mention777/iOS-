@@ -19,4 +19,6 @@ OC对象可以分为3种:</br>
 　　2)superclass指针</br>
 　　3)类的属性信息(@property),类的对象方法信息(instance method)</br>
 　　4.类的协议信息(protocol),类的成员变量信息(ivar)</br>
-*  
+>p.s 此处的类的成员变量信息指的是,成员变量的描述信息(类型,变量名等) </br>
+
+>class的底层实现实际就是调用object_getClass方法 
