@@ -85,7 +85,7 @@ Q1.对象的isa指针指向哪里?</br>
 * class对象的isa指向meta-class对象</br>
 * meta-class对象的isa指向基类的meta-class对象
 
-Q2.OC的类信息存放在哪里>
+Q2.OC的类信息存放在哪里?</br>
 * 对象方法、属性、成员变量、协议信息存放在class对象中</br>
 * 类方法存放在meta-class对象中</br>
 * 成员变量的具体值,存放在instance对象</br>
