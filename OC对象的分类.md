@@ -31,10 +31,13 @@ OC对象可以分为3种:</br>
 　　2.superclass指针</br>
 　　3.类的类方法信息</br>
 
->Tip</br>
+>Tip.</br>
 >1.获取原类对象方式:将类对象作为参数传入object_getClass方法中 ,即可获得原类对象</br>
 2.注:class方法返回的一直是class对象,类对象,故[[NSObject class]class]无论调用多少次class方法,都为类对象</br>
 3.meta-class对象和class对象的内存结构是一样的,但是用途不一样,即普通的class对象对应存储的信息(类的属性名等)为NULL,同理,对于类对象而言,类方法信息也为NULL</br>
 4.调用class_isMetaClass可以判断是否为原类对象
 
-
+>比较三个方法:</br>
+>**objc_getClass**方法是传入一个字符串,返回对应的类对象,不会返回原类对象</br>
+**object_getClass**方法是传入一个对象,根据传入的对象,返回类对象或原类对象,即是拿到isa</br>
+**class**方法:返回的就是类对象</br> 
