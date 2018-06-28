@@ -65,5 +65,22 @@ struct {
 
 * 共用体(union):大家共用一个内存,往共用体中添加一个结构体是不影响的</br>
 
+### Class内部结构</br>
+* 类对象调用data()方法,结果相当就是如下的class_rw_t结构体</br>
+![](Snip20180622_11.png)
+
+* class_rw_t里面的methods,properties,protocols是二维数组,是可读可写的,包含了类的初始内容,分类的内容,即类和分类的声明的属性,方法,协议都在里面</br>
+
+* class_ro_t里面的baseMethodList,baseProtocols,baseProperties是一维数组,是只读的,包含了类的初始内容,相当于只装着类声明的属性和方法,协议等初始信息,不包含分类
+
+* 原先的bits原先是指向class_ro_t,后来重新创建了一个class_rw_t,再讲bits指向class_rw_t,class_rw_t里面的class_ro_t又指向原先的class_ro_t
+
+>举例:methods是一个二维数组,里面每个元素是method_list_t,而method_list_t又是一个数组,数组里存放着每个元素是method_t类型元素,另外两个依次类推</br>
+ro中的数组为一维数组,里面就是method_t类型,另外两个依次类推</br>
+这么设计的好处是:**便于动态的添加方法**
+
+>两者的结合:类一开始声明的属性和方法,协议等初始信息,存储在class_ro_t中对应的baseMethodList,baseProtocols,baseProperties中,在程序运行时,再将分类中的方法,协议等信息重新组合,成class_rw_t对应的二维数组,即class_rw_t中部分信息是从class_ro_t中来的
 
 
+* 原类对象是一种特殊的类对象,只是里面存储的只有类方法
+* 
