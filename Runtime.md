@@ -139,7 +139,7 @@ struct bucket_t{
 * 若key&mask的地址已经存在,则会直接将结果-1,即若原先的值为4,则会判断索引为3的位置是否有对应方法,有则存入,没有则继续-1操作.若索引为0,则直接将其值变为mask
 * 散列表数组当容量不足时会进行扩容,一旦散列表数组扩容,则会将缓存清空,扩容策略是,原先长度乘以2
 >若长度为4,当第4个方法即将进入缓存时,由于容量已满,则系统会进行扩容,扩容至8个,然后将刚刚的第4个方法放入,清空其他所有的,故此时当前的占用方法数(occupied)为1
-* 方法调用的本质:是通过传入对象和SEL去寻找对应方法并执行,即:`[person test]`该方法转为c/c++代码,实际是转为`objc_msgSend(person sel_registerName(“test”));`</br>
+* 方法调用的本质:是通过传入对象和SEL去寻找对应方法并执行,即:[person test]该方法转为c/c++代码,实际是转为`objc_msgSend(person sel_registerName(“test”));`</br>
 消息接收者(receiver):person</br>
 消息名称:test,故通过SEL作为key去缓存方法是有效率的</br>
 * 方法缓存会先从cache中查找方法,若没有,则从方法列表中查找,若找到,则会添加到缓存cache中,若类方法没有,会从父类方法中的cache中查找,若没有,则从父类方法列表查找,依次类推...若存在,则会在自己的类对象cache中缓存一份
@@ -158,6 +158,32 @@ struct bucket_t{
 
 * 消息发送流程:
 ![](Snip20180625_1.png)
+
+* 动态方法解析:</br>
+1)判断SEL,调用class_addMethod()方法
+
+```objc
+struct method_t {
+    SEL sel;
+    char *types;
+    IMP imp;
+};
+
+//该方法会直接将方法添加到类对象的class_rw_t中,即methods中
++ (BOOL)resolveInstanceMethod:(SEL)sel {
+    if (sel == @selector(test)) {
+        //通过class_getInstanceMethod方法获取其他方法,该方法的类型为Method,内部实际为struct objc_method *,其等价于struct method_t
+        //struct method_t *method = (struct method_t *)class_getInstanceMethod(self, @selector(other));
+        
+        Method method =  class_getInstanceMethod(self, @selector(other));
+        //动态添加方法,但在开发中并不常用
+        class_addMethod(self, sel, method->imp, method->types);
+        return YES;//建议都返回YES,虽然返回NO也能成功
+    }
+    return [super resolveInstanceMethod:sel];
+}
+```
+![](Snip20180626_4.png)
 
 * 原类对象是一种特殊的类对象,只是里面存储的只有类方法
 * 
