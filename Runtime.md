@@ -173,9 +173,9 @@ struct method_t {
 + (BOOL)resolveInstanceMethod:(SEL)sel {
     if (sel == @selector(test)) {
         //通过class_getInstanceMethod方法获取其他方法,该方法的类型为Method,内部实际为struct objc_method *,其等价于struct method_t
-        //struct method_t *method = (struct method_t *)class_getInstanceMethod(self, @selector(other));
+        struct method_t *method = (struct method_t *)class_getInstanceMethod(self, @selector(other));
         
-        Method method =  class_getInstanceMethod(self, @selector(other));
+        //Method method =  class_getInstanceMethod(self, @selector(other));
         //动态添加方法,但在开发中并不常用
         class_addMethod(self, sel, method->imp, method->types);
         return YES;//建议都返回YES,虽然返回NO也能成功
