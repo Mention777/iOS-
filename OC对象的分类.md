@@ -21,5 +21,5 @@ OC对象可以分为3种:</br>
 　　4.类的协议信息(protocol),类的成员变量信息(ivar)</br>
 >p.s 此处的类的成员变量信息指的是,成员变量的描述信息(类型,变量名等) </br>
 
-<font color=#00ffff size=3>class的底层实现实际就是调用object_getClass方法 </font>
+class的底层实现实际就是调用object_getClass方法
 
