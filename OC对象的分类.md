@@ -41,3 +41,8 @@ OC对象可以分为3种:</br>
 >**objc_getClass**方法是传入一个字符串,返回对应的类对象,不会返回原类对象</br>
 **object_getClass**方法是传入一个对象,根据传入的对象,返回类对象或原类对象,即是拿到isa</br>
 **class**方法:返回的就是类对象</br> 
+
+```objc
+[person personTest];
+//底层上,会将实例方法或对象方法转换成runtime的objc_msgSend方法,personTest,但具体是对象方法还是类方法是不知道的,实际上为objc_msgSend(person ,@selector(personTest));
+```
