@@ -44,5 +44,6 @@ OC对象可以分为3种:</br>
 
 ```objc
 [person personTest];
-//底层上,会将实例方法或对象方法转换成runtime的objc_msgSend方法,personTest,但具体是对象方法还是类方法是不知道的,实际上为objc_msgSend(person ,@selector(personTest));
+//底层上,会将实例方法或对象方法转换成runtime的objc_msgSend方法,personTest,但具体是对象方法还是类方法是不知道的
+//实际上即为objc_msgSend(person ,@selector(personTest));
 ```
