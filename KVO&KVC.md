@@ -84,7 +84,6 @@ KVO使用原理本质就是动态生成了一个NSKVONotifying打头的类,使�
 
 ### 几道面试题目</br>
 Q1:iOS用什么方式实现对一个对象的KVO?(KVO的本质是什么)</br>
-A:
    * 利用runtimeAPI动态生成一个子类,并且让instance对象的isa指向这个全新的子类</br>
    * 当修改instance对象的属性时,会调用fuoundation的_NSSetXXXValueAndNotify函数(内部实现如上述)</br>
    
