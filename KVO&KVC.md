@@ -112,7 +112,7 @@ Q2:如何手动触发KVO?</br>
 KVC的setValue底层实现:</br>
 ![](Snip20180629_11.png)
 
-即使对象只有属性,没有setter,只要使用KVC给对象赋值,都是**会触发KVO**的,因为即使这样,KVC在修改完属性之后会手动调用willchange和didchange方法
+* 即使对象只有属性,没有setter,只要使用KVC给对象赋值,都是**会触发KVO**的,因为即使这样,KVC在修改完属性之后会手动调用willchange和didchange方法
 
 KVC的ValueForkey底层实现:</br>
 ![](Snip20180629_13.png)
