@@ -81,3 +81,4 @@ KVO使用原理本质就是动态生成了一个NSKVONotifying打头的类,使�
 >原因:object_getClass获取的是真正isa指向的类对象,而由于对象重写了class,有可能在内部重写的class方法,直接返回了原先的类对象,不然若调用NSObject的class方法,其内部就是通过返回object_getClass()的方式,故结果不一致,这么做的好处是屏蔽了内部实现,隐藏了类的存在
 
 >注:C语言中指针可以当做数组来使用
+
