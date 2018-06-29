@@ -95,3 +95,16 @@ Q2:如何手动触发KVO?</br>
 　KVO手动触发:手动实现willchange和didchange方法,本来是didchange方法会触发监听者的监听方法,所以只需实现该方法即可,但需要实现willchange方法是因为didchange内部有判断willchange是否有执行
  
 >KVO的本质是替换了原先的set方法,所以能不能监听,要看该属性有没有set方法,所以直接修改成员变量时不会触发KVO的
+
+**KVC**:键值编码,可以通过一个key来访问某个属性
+
+```objc
+//KVC常用的API有:
+- (void)setValue:(id)value forKey:(NSString *)key;
+- (void)setValue:(id)value forKeyPath:(NSString *)keyPath;
+- (id)valueForKey:(NSString *)key;
+- (id)valueForKeyPath:(NSString *)keyPath;
+
+//key和keyPath的区别:
+//key只能访问当前对象的属性,keyPath支持一级一级的访问属性
+```
