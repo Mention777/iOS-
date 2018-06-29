@@ -87,3 +87,11 @@ Q1:iOS用什么方式实现对一个对象的KVO?(KVO的本质是什么)</br>
    * 利用runtimeAPI动态生成一个子类,并且让instance对象的isa指向这个全新的子类</br>
    * 当修改instance对象的属性时,会调用fuoundation的_NSSetXXXValueAndNotify函数(内部实现如上述)</br>
    
+Q2:如何手动触发KVO?</br>
+   * 手动调用`willChangeValueForKey:`和`didChangeValueForKey:`
+
+解析:</br>
+　KVO自动触发:即有人手动修改了某个属性,系统会自动触发调用对应函数通知监听者,调用监听方法</br>
+　KVO手动触发:手动实现willchange和didchange方法,本来是didchange方法会触发监听者的监听方法,所以只需实现该方法即可,但需要实现willchange方法是因为didchange内部有判断willchange是否有执行
+ 
+>KVO的本质是替换了原先的set方法,所以能不能监听,要看该属性有没有set方法
