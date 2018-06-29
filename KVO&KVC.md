@@ -108,3 +108,13 @@ Q2:如何手动触发KVO?</br>
 //key和keyPath的区别:
 //key只能访问当前对象的属性,keyPath支持一级一级的访问属性
 ```
+
+KVC的setValue底层实现:</br>
+![](Snip20180629_11.png)
+
+即使对象只有属性,没有setter,只要使用KVC给对象赋值,都是**会触发KVO**的,因为即使这样,KVC在修改完属性之后会手动调用willchange和didchange方法
+
+KVC的ValueForkey底层实现:</br>
+![](Snip20180629_13.png)
+
+>注:+(Bool)accessInstanceVariablesDirectly方法默认返回值就是YES;
