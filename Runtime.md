@@ -249,5 +249,21 @@ struct method_t {
 * @dynamic会提醒编译器不自动生成get和set方法的实现, 不要自动生成成员变量
 * @sycthesize和@dynamic均不影响set和get的声明
 
-* 
-* 
+#### 几道面试题</br>
+1.下面的代码输出的结果
+
+```objc
+    //假设self为MXStudent类,其是MXPerson的子类
+    NSLog(@"[self class] = %@",[self class]);
+    NSLog(@"[self superclass] = %@",[self superclass]);
+    NSLog(@"[super class] = %@",[super class]);
+    NSLog(@"[super superclass] = %@",[super superclass]);
+    
+-----------------------------------------------------------
+结果为:MXStudent
+      MXPerson
+      MXStudent
+      MXPerson
+```
+
+
