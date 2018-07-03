@@ -293,3 +293,27 @@ struct objc_super {
 >总结结论:[super message]的底层实现
 >* 消息接收者仍然是子类对象
 >* 从父类开始查找方法的实现
+
+2.下面的代码输出的结果
+
+```objc
+NSLog(@"%d", [NSObject isKindOfClass:[NSObject class]]); 
+NSLog(@"%d", [NSObject isMemberOfClass:[NSObject class]]);
+NSLog(@"%d", [MXPerson isKindOfClass:[MXPerson class]]); 
+NSLog(@"%d", [MXPerson isMemberOfClass:[MXPerson class]]);
+
+--------------------------------------
+结果为:1
+      0
+      0
+      0
+
+```
+
+>解析:</br>
+>* -isMemberOfClass方法:判断调用对象的类对象是否就是后面的对象
+* -isKindOfClass方法:判断调用对象的类对象是否是后面的对象或其子类
+* +isMemberOfClass方法:判断调用对象的元类对象是否就是后面的对象
+* +isKindOfClass方法:判断调用对象的元类对象是否是后面的对象或其子类
+
+注:[XXX isKindOfClass [NSObject class]];其中XXX不管是哪个类,只要是NSObject体系下的,都返回YES;
