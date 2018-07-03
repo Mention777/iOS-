@@ -239,6 +239,12 @@ struct method_t {
 @sycthesize age= _age, height = _height;
 //意义是:为age属性自动生成一个_age的成员变量,及get和set方法的实现
 //后面的版本xcode已经自动帮忙完成
+
+@sycthesize age 
+//此时,age的成员变量名为age
+
+@dynamic age
+//即不会生成_age成员变量,不会实现age的setter和getter的实现
 ```
 * @dynamic会提醒编译器不自动生成get和set方法的实现, 不要自动生成成员变量
 * @sycthesize和@dynamic均不影响set和get的声明
