@@ -265,5 +265,31 @@ NSLog(@"[super superclass] = %@",[super superclass]);
       [super class] = MXStudent
       [super superclass] = MXPerson
 ```
+>解析:</br>
 
+```objc
+struct objc_super {
+  __unsafe_unretained _Nonnull id receiver; //消息接收者;
+  __unsafe_unretained _Nonnull Class super_class; //消息接收者的父类
+}
+```
+>从底层看出,super方法内部为objc_msgSendSuper方法,第一个参数是上述的结构体,且该结构体为临时结构体,即为局部变量</br>
+>* super调用的receiver仍然是原先的对象本身
+>* super_class表示对应的方法是从哪里开始找,及调用super后,直接从其父类中开始查找对应方法
 
+>但实际上,上述为C++代码实现,但真正的super方法底层是调用objc_msgSendSuper2方法,里面的结构体中第二个参数传入的是当前类,但在方法内会调用当前类的superclass方法从当前类的父类开始查找方法,所以本质是一样的
+
+```objc
+//class及superclass方法实现(伪代码)
+- (Class)class{
+    return object_getClass(self);
+ }
+ 
+- (Class)superclass{
+    return class_getSuperclass(object_getClass(self));
+ }
+```
+
+>总结结论:[super message]的底层实现
+>* 消息接收者仍然是子类对象
+>* 从父类开始查找方法的实现
