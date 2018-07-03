@@ -253,17 +253,17 @@ struct method_t {
 1.下面的代码输出的结果
 
 ```objc
-    //假设self为MXStudent类,其是MXPerson的子类
-    NSLog(@"[self class] = %@",[self class]);
-    NSLog(@"[self superclass] = %@",[self superclass]);
-    NSLog(@"[super class] = %@",[super class]);
-    NSLog(@"[super superclass] = %@",[super superclass]);
+//假设self为MXStudent类,其是MXPerson的子类
+NSLog(@"[self class] = %@",[self class]);
+NSLog(@"[self superclass] = %@",[self superclass]);
+NSLog(@"[super class] = %@",[super class]);
+NSLog(@"[super superclass] = %@",[super superclass]);
     
 -----------------------------------------------------------
-结果为:MXStudent
-      MXPerson
-      MXStudent
-      MXPerson
+结果为:[self class] = MXStudent
+      [self superclass] = MXPerson
+      [super class] = MXStudent
+      [super superclass] = MXPerson
 ```
 
 
