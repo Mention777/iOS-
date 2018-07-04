@@ -72,7 +72,7 @@ memcpy:会一个一个拷贝(从小地址开始)
 >之所以调用子类的方法,会调用父类的initialize方法,是因为内部主动发送了2条消息(一条是给父类发送initialize消息,一条是给子类发送initialize消息)</br>
 >注:initialize方法最终是通过objc_msgSend方法调用的
 
-+initialize()和+load()的很大区别是,_initialize是通过objc_msgSend进行调用的,所以有以下特点:</br>
++initialize()和+load()的很大区别是,+initialize是通过objc_msgSend进行调用的,所以有以下特点:</br>
 * 如果子类没有实现+initialize,会调用父类的+initialize方法(所以父类的+initialize方法可能会被调用多次)
 * 如果分类实现了+initialize,就覆盖了类本身的+initialize调用
 
