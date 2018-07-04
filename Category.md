@@ -80,9 +80,11 @@ memcpy:会一个一个拷贝(从小地址开始)
 1.调用方式</br>
 * load是根据函数地址直接调用
 * initialize是通过objc_msgSend调用</br>
+
 2.调用时刻</br>
 * load是runtime加载类、分类的时候调用(只会调用一次)
 * initialize是类第一次接收到消息的时候调用,每一个类只会initialize一次,但父类的initialize方法可能会被调用多次</br>
+
 3.调用顺序</br>
 1)load:</br>
 * 先调用类的load 1)先编译的类优先调用load 2)调用子类的load之前,会先调用父类的load 
