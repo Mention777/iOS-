@@ -94,3 +94,46 @@ memcpy:会一个一个拷贝(从小地址开始)
 　　2)initialize:</br>
 * 先初始化父类
 * 再初始化子类(可能最终调用的是父类的initialize方法)
+
+### 关联对象</br>
+```objc
+@property (nonatomic, assign)int age;
+```
+在类中声明属性,系统会做3件事:</br>
+1.生成带下划线成员变量 </br>
+2.setter和getter声明 </br>
+3.setter和getter的实现 </br>
+
+分类中添加属性,则只会生成getter和setter的声明
+
+要想与类一样,实现一个属性的读写,可供解决方案有:</br>
+1.通过全局变量当中间值赋值,问题是没次创建一个属性都是共用一个全局变量,会导致数据错乱</br>
+2.使用可变字典作为全局变量,问题:1.存在线程安全的问题2.每次添加属性比较麻烦
+
+>默认情况下,因为分类底层结构的限制,不能添加成员变量到分类中,但可以通过关联对象来间接实现
+
+```objc
+//添加关联对象
+void objc_setAssociatedObject(id  _Nonnull object, const void * _Nonnull key, 
+                              id  _Nullable value, objc_AssociationPolicy policy);
+                              
+//获得关联对象
+id objc_getAssociatedObject(id  _Nonnull object, const void * _Nonnull key)
+
+//移除所有关联对象
+void objc_removeAssociatedObjects(id  _Nonnull object)
+```
+
+* 关联策略policy</br>
+![](Snip20180703_24.png)
+
+* 关键字key</br>
+关联属性方法中的key获取方式:</br>
+1.可以直接通过const void *name = &name方式,即传入name获取</br>
+2.static const char name.传入&name获取</br>
+3.key处传入@selector(name);</br>
+4.仅限于getter,直接在参数处传入_cmd</br>
+
+>注:1)往全局变量添加一个static,令该全局变量作用域仅当前文件</br>
+　　2)直接将字符串写入,由于字符串位于常量区,故所有的值都是相同的
+　　3)因为每个方法其实都默认传递2个参数,第一个是self,第二个是_cmd,故也可以使用一下方式传递key值,setter方法不行,因为两者的@selector是不同的
