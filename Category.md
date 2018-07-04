@@ -86,7 +86,7 @@ memcpy:会一个一个拷贝(从小地址开始)
 * initialize是类第一次接收到消息的时候调用,每一个类只会initialize一次,但父类的initialize方法可能会被调用多次</br>
 
 3.调用顺序</br>
-1)load:</br>
+  1)load:</br>
 * 先调用类的load 1)先编译的类优先调用load 2)调用子类的load之前,会先调用父类的load 
 * 再调用分类的load 1)先编译的分类,优先调用load</br>
 2)initialize:</br>
