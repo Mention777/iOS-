@@ -75,3 +75,18 @@ memcpy:会一个一个拷贝(从小地址开始)
 +initialize()和+load()的很大区别是,_initialize是通过objc_msgSend进行调用的,所以有以下特点:</br>
 * 如果子类没有实现+initialize,会调用父类的+initialize方法(所以父类的+initialize方法可能会被调用多次)
 * 如果分类实现了+initialize,就覆盖了类本身的+initialize调用
+
+### +load()方法和+initialize()方法总结</br>
+1.调用方式</br>
+* load是根据函数地址直接调用
+* initialize是通过objc_msgSend调用</br>
+2.调用时刻</br>
+* load是runtime加载类、分类的时候调用(只会调用一次)
+* initialize是类第一次接收到消息的时候调用,每一个类只会initialize一次,但父类的initialize方法可能会被调用多次</br>
+3.调用顺序</br>
+1)load:</br>
+* 先调用类的load 1)先编译的类优先调用load 2)调用子类的load之前,会先调用父类的load 
+* 再调用分类的load 1)先编译的分类,优先调用load</br>
+2)initialize:</br>
+* 先初始化父类
+* 再初始化子类(可能最终调用的是父类的initialize方法)
