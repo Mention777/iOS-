@@ -317,3 +317,36 @@ NSLog(@"%d", [MXPerson isMemberOfClass:[MXPerson class]]);
 * +isKindOfClass方法:判断调用对象的元类对象是否是后面的对象或其子类
 
 注:[XXX isKindOfClass [NSObject class]];其中XXX不管是哪个类,只要是NSObject体系下的,都返回YES;
+
+方法调用[person print],本质上就是通过person->isa,在类中找到对应的对象方法,即找到person对象最前面的8个字节(isa)找到对应的类对象
+
+局部变量分配在栈空间</br>
+栈空间分配是从高地址到低地址的
+
+oc对象的方法本质就是函数调用
+
+>LLVM的中间代码:</br>
+OC在变为机器代码之前,会被LLVM编译器转换为中间代码(.ll)</br>
+
+```objc
+//可以通过以下指令生成中间代码:
+clang -emit-llvm -S
+```
+
+runtime常用API:
+
+![](Snip20180627_24.png)
+
+>1.往类中添加属性/协议/方法等信息,在注册类之前完成比较好</br>
+类对象注册完毕,即所有的有关的类信息都注册好了</br>
+>2.不能往已经定好的(注册好的)类中添加成员变量,因为其是放在ro中,是只读的
+
+![](Snip20180627_25.png)
+
+>runtime中copy.create等需要手动释放,即调用free函数释放
+
+![](Snip20180627_27.png)
+
+![](Snip20180627_28.png)
+
+![](Snip20180627_29.png)
