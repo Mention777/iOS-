@@ -143,3 +143,15 @@ void objc_removeAssociatedObjects(id  _Nonnull object)
 >　2)直接将字符串写入,由于字符串位于常量区,故所有的值都是相同的</br>
 >　3)因为每个方法其实都默认传递2个参数,第一个是self,第二个是_cmd,故也可以使用一下方式传递key值,setter方法不行,因为两者的@selector是不同的</br>
 >　4)关联对象中存入的值既不是存放类对象中,也不是存放在实例对象中
+
+实现关联对象技术的核心对象有:</br>
+* AssociationsManager
+* AssociationHashMap
+* ObjectAssociationMap
+* ObjcAssociation
+
+![](Snip20180703_30.png)
+
+其中的disguised_ptr_t是经过一个DISGUISE函数(其内部就是获取object地址进行相应的位运算)
+
+>若查找时发现value已经销毁或不存在,则系统会报坏内存访问,因为ObjcAssociation内部对value是强引用的
