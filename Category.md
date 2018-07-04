@@ -133,8 +133,13 @@ void objc_removeAssociatedObjects(id  _Nonnull object)
 2.static const char name.传入&name获取</br>
 3.key处传入@selector(name);</br>
 4.仅限于getter,直接在参数处传入_cmd</br>
+  
+  ```objc
+  objc_getAssociatedObject(self, _cmd)
+  ```
 
->注:
+>注:</br>
 >　1)往全局变量添加一个static,令该全局变量作用域仅当前文件</br>
 >　2)直接将字符串写入,由于字符串位于常量区,故所有的值都是相同的</br>
->　3)因为每个方法其实都默认传递2个参数,第一个是self,第二个是_cmd,故也可以使用一下方式传递key值,setter方法不行,因为两者的@selector是不同的
+>　3)因为每个方法其实都默认传递2个参数,第一个是self,第二个是_cmd,故也可以使用一下方式传递key值,setter方法不行,因为两者的@selector是不同的</br>
+>　4)关联对象中存入的值既不是存放类对象中,也不是存放在实例对象中
