@@ -318,6 +318,18 @@ NSLog(@"%d", [MXPerson isMemberOfClass:[MXPerson class]]);
 
 注:[XXX isKindOfClass [NSObject class]];其中XXX不管是哪个类,只要是NSObject体系下的,都返回YES;
 
+3.什么是runtime?平时项目中是否使用过?
+
+* OC是一门动态性比较强的编程语言,允许很多操作推迟到程序运行时再进行
+* OC的动态性就是由runtime来支撑和实现的,runtime是一套C语言API,封装了很多动态性相关的函数
+* 平时编写OC代码,底层就是转换成了runtime API进行调用
+
+具体应用:</br>
+* 利用关联对象(associatedObject)给分类添加属性
+* 遍历类的所有成员变量(修改textfield的占位文字颜色,字典转模型,自动归档解档)
+* 交换方法实现(交换系统方法)
+* 利用消息转发机制解决方法找不到的问题
+
 方法调用[person print],本质上就是通过person->isa,在类中找到对应的对象方法,即找到person对象最前面的8个字节(isa)找到对应的类对象
 
 局部变量分配在栈空间</br>
@@ -349,4 +361,10 @@ runtime常用API:
 
 ![](Snip20180627_28.png)
 
+>注:method_exchangeImplementations方法交换的是类对象中class_rw_t中的方法数组中的mothod_t中的IMP</br>
+调用method_exchangeImplementations就会清空类对象中的方法cache</br>
+用途:1.用于往系统自带的方法添加一些新东西等
+
 ![](Snip20180627_29.png)
+
+>fundation框架有时存在表面上是一个类型,实际是另一种类型的情况(NSMutableArray),称之为类簇,比如,Nsstring,NSArray,NSDictionary等 
