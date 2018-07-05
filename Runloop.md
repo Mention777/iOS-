@@ -52,8 +52,8 @@ Mode中各个成员的含义:</br>
 2.`performSelector :afterDelay`
 
 * Observers</br>
-1.监听runloop的状态
-2.UI刷新(在runloop休眠之前)
+1.监听runloop的状态</br>
+2.UI刷新(在runloop休眠之前)</br>
 3.自动释放池(在runloop休眠之前)
 
 ### Runloop运行逻辑:</br>
