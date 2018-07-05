@@ -60,15 +60,15 @@ Mode中各个成员的含义:</br>
 
 ![](Snip20180604_1.png)
 
-runloop处理事件一般都是调用`_CFRUNLOOP_IS_CALLING_OUT_TO_XXXX`函数进行事件处理
+Runloop处理事件一般都是调用`_CFRUNLOOP_IS_CALLING_OUT_TO_XXXX`函数进行事件处理
 
 GCD中当仅在子线程做事情时,是不依赖Runloop的,但当需要回到主线程等线程间操作的时候,需要runloop来执行
 
 线程休眠其实和线程阻塞类似,但和通过代码例如while(1)令线程阻塞是不一样的,使用代码while(1),线程并未休眠,而是不断进行while(1)判断,汇编也并未停止,而线程休眠是可以真正意义上做到令线程不做任何的事情
 
-runloop**休眠**的实现原理: 会从用户态切换到内核的内核态,在内核态执行休眠的目的,是可以实现真正意义上的休眠(即没有消息就是休眠,有消息就唤醒,并回到用户态)
+Runloop**休眠**的实现原理: 会从用户态切换到内核的内核态,在内核态执行休眠的目的,是可以实现真正意义上的休眠(即没有消息就是休眠,有消息就唤醒,并回到用户态)
 
-runloop响应用户操作具体流程:先通过source1事件进行捕捉,然后再source0事件进行处理
+Runloop响应用户操作具体流程:先通过source1事件进行捕捉,然后再source0事件进行处理
 
 ### Runloop在实际开发中的应用:</br>
 * 线程保活
@@ -97,7 +97,7 @@ NSTimer *timer = [NSTimer timerWithTimeInterval:1 repeats:YES block:^(NSTimer * 
 
 * 线程保活
 
-runloop的run方法是一个无线的循环,故外部停止runloop只是停止其中一次循环,故是无法停止runloop的,run方法用于开启一个永不销毁的线程
+Runloop的run方法是一个无线的循环,故外部停止runloop只是停止其中一次循环,故是无法停止Runloop的,run方法用于开启一个永不销毁的线程
 
 使用runMode方法在唤醒后,做完对应事情,runloop就会退出
 
@@ -106,5 +106,5 @@ performSelector方法的waitUntilDone设置为YES,代表该语句执行完后才
 GCD只负责创建线程,不负责线程保活
 
 ### 一个问题:</br>
-Q:保住线程的命为什么要用runloop,用强指针不就好了?</br>
-A:准确的说,使用runloop是为了让线程保持激活状态,线程的任务一旦执行完毕,生命周期就结束,无法再使用
+Q:保住线程的命为什么要用Runloop,用强指针不就好了?</br>
+A:准确的说,使用Runloop是为了让线程保持激活状态,线程的任务一旦执行完毕,生命周期就结束,无法再使用
