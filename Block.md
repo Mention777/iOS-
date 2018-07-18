@@ -157,3 +157,36 @@ dispose函数内部会调用`_Block_object_dispose`函数</br>
 ![](Snip20180717_19.png)
 
 当访问的是个对象类型对象,会自动生成`_Block_object_assign`函数和`_Block_object_dispose`函数对该对象进行内存管理
+
+看强引用什么时候被释放,则该对象就什么时候释放,与弱引用无关
+
+### Block的修改外部auto变量</br>
+默认情况下,在block中是无法修改外部的变量的</br>
+从本质上看,定义变量是在一个函数,而block调用的函数又是另一个函数,二者作用域不同,故肯定是无法修改(代码)
+
+要想修改外部变量,做法:</br>
+* 将变量变为static或者为全局变量
+* `__block`关键字
+
+`__block`可以用于解决block内部无法修改auto变量值的问题</br>
+`__block`不能修饰全局变量,静态变量(static)
+
+编译器会将`__block`包装成一个对象,故其也有copy与dispose函数</br>
+包装的对象结构体为:
+
+```objc
+struct __Block_byref_age_0 {
+  void *__isa;
+  ___Block_byref_age_0 *__forwarding;//该指针指向自己
+  int __flags;
+  int __size;
+  int age;
+}
+```
+
+在block中定义了一个指针,指向上面的这个结构体,当需要修改值时,通过指针找到对应的`__forwarding`,在找到对应的age,从而能够成功地修改和读取值了
+
+此时在外边打印age的地址值,实际上就是`__block_byref_age_0`内部的age的地址
+
+>注意点:若block外部定义了一个可变数组array,在block内部使用方法[array addObject:@“111”],是可以的,因为其本质是将array用来使用,而不是直接修改array的指针的东西,例如array = nil,(该语句就会报错 )
+
