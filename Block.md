@@ -1,7 +1,8 @@
 # Block
-### 定义及本质</br>
+### Block定义及本质</br>
 block本质上也是一个**OC对象**,它内部有个isa指针(有isa指针就可以认为是OC对象)</br>
-block是**封装了函数调用以及函数调用环境的OC对象**
+block是**封装了函数调用以及函数调用环境的OC对象**</br>
+>函数调用环境:函数调用所需要的参数及外部参数等
 
 ```objc
 int age = 20;
@@ -97,4 +98,59 @@ static void __main_block_func_0(struct __main_block_impl_0 *__cself) {
 * 今后凡是涉及到会不会捕获,只需要判断是否为局部变量即可
 
 * 在方法中的block直接使用成员变量,即_name时,也是捕获方法调用者self,再通过self去取_name的值
+
+### Block的类型</br>
+block有3种类型,可以通过调用class方法或者isa指针查看具体类型,最终都是继承自NSBlock类型</br>
+* `__NSGlobalBlock__`(`_NSConcreteGlobalBlock`)
+* `__NSStackBlock__`(`_NSConcreteStackBlock`)
+* `__NSMallocBlock__`(`_NSConcreteMallocBlock`)
+
+>block的类型一切以运行时的结果为准</br>
+同时通过clang转成的代码(C++)并不是真正的底层代码</br>
+clang是属于LLVM中的一部分 
+
+![](Snip20180716_12.png)
+
+>堆:动态分配内存,需要程序员申请,也需要程序员自己管理内存
+
+![](Snip20180716_15.png)
+
+* 只要没有访问auto变量就是global类型,哪怕有访问static变量或者局部变量
+* 在栈上的block由于处于栈区,受作用域影响,在作用域之外,有可能被销毁,导致数据错乱
+* globalBlock调用copy方法,依然为global类型
+
+### Block的copy操作</br>
+![](Snip20180716_17.png)
+
+在ARC环境下,编译器会根据情况自动将栈上的block复制到堆上,比如以下情况:</br>
+* block作为函数的返回值
+* 将block赋值给`__strong`指针时
+* block作为cocoaAPI中方法含有usingBlock的方法参数时
+* block作为GCD方法的参数时
+
+MRC环境下block属性建议写法:使用copy关键字</br>
+>MRC环境下若使用retain,只会令block的引用计数+1,并不会将block复制到栈区</br>
+
+ARC环境下,copy和strong都是可以的,因为在ARC环境下,对block强引用也会对block进行一次copy操作,但还是建议统一写copy
+
+### Block的访问外部对象类型auto变量</br>
+* 栈空间上的block,是不会持有外部对象的
+* 堆空间上的block,则会持有外部对象,当block使用到外部变量时,会对外部变量进行一次retain操作,在block自己销毁时,也会对内部用到的外部变量做一次release操作
+
+当block内部访问了对象类型的auto变量时:
+ 
+* 如果block是在栈上:</br>
+无论block内部对对象类型的auto变量是强引用还是弱引用,都不会持有该对象,即不会对auto变量产生强引用
+
+* 如果block被拷贝到堆上:</br>
+会调用block内部的copy函数</br>
+copy函数内部会调用`_Block_object_assign`函数</br>
+`_Block_object_assign`函数会根据auto变量的修饰符(`__strong`,`__weak`,`__unsafe_unretained`)做出相应的操作,类似于retain(形成强引用、弱引用)
+
+* 当block从堆上移除:</br>
+会调用block内部的dispose函数</br>
+dispose函数内部会调用`_Block_object_dispose`函数</br>
+`_Block_object_dispose`函数会自动释放引用的auto变量,类似于release
+
+
 
