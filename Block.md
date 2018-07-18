@@ -172,9 +172,9 @@ dispose函数内部会调用`_Block_object_dispose`函数</br>
 `__block`不能修饰全局变量,静态变量(static)
 
 编译器会将`__block`包装成一个对象,故其也有copy与dispose函数</br>
-包装的对象结构体为:
 
 ```objc
+//包装的对象结构体为:
 struct __Block_byref_age_0 {
   void *__isa;
   ___Block_byref_age_0 *__forwarding;//该指针指向自己
