@@ -152,5 +152,8 @@ copy函数内部会调用`_Block_object_assign`函数</br>
 dispose函数内部会调用`_Block_object_dispose`函数</br>
 `_Block_object_dispose`函数会自动释放引用的auto变量,类似于release
 
+>copy函数和dispose函数都是做内存管理用的,只要见到这两个函数,就大概知道与对象有关
 
+![](Snip20180717_19.png)
 
+当访问的是个对象类型对象,会自动生成`_Block_object_assign`函数和`_Block_object_dispose`函数对该对象进行内存管理
