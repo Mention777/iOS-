@@ -41,27 +41,25 @@ struct __main_block_desc_0 {
 
 int main(int argc, const char * argv[]) { 
 // 定义block变量
-// 调用__test_block_impl_0函数,返回结构体变量地址
-   void (*block)(void) = &__test_block_impl_0(
-                                               __main_block_func_0,
-                                               &__main_block_desc_0_DATA
-                                              );
+// 调用__main_block_impl_0函数,返回结构体变量地址
+void (*block)(void) = &__main_block_impl_0(
+                                           __main_block_func_0,
+                                           &__main_block_desc_0_DATA
+                                          );
 
 // 执行block内部的代码
 // 此时,若block有参数时,会将参数一起传入
    block->FuncPtr(block);
    //之所以block能直接调用FuncPtr是因为存储FuncPtr的impl结构体位于结构体的第一位,所以其地址与结构体的地址是一样的
-   //从另一方面看,由于impl直接是结构体对象,相当于可以直接将__block_impl结构体的东西赋值过去到__test_block_impl_0中,故从这方面看也是可以直接调用的
+   //从另一方面看,由于impl直接是结构体对象,相当于可以直接将__block_impl结构体的东西赋值过去到__main_block_impl_0中,故从这方面看也是可以直接调用的
 }
  
 
-struct __test_block_impl_0 {
+struct __main_block_impl_0 {
   struct __block_impl impl;
-  struct __test_block_desc_0* Desc;
-  int age;
-  int *height;
-  //构造函数,返回结构体对象,故block对象本质就是一个结构体对象
-  __test_block_impl_0(void *fp, struct __test_block_desc_0 *desc, int _age, int *_height, int flags=0) : age(_age), height(_height) {
+  struct __main_block_desc_0* Desc;
+  // 构造函数（类似于OC的init方法），返回结构体对象
+  __main_block_impl_0(void *fp, struct __main_block_desc_0 *desc, int flags=0) {
     impl.isa = &_NSConcreteStackBlock;
     impl.Flags = flags;
     impl.FuncPtr = fp;
