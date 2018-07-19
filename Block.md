@@ -186,7 +186,9 @@ struct __Block_byref_age_0 {
 
 在block中定义了一个指针,指向上面的这个结构体,当需要修改值时,通过指针找到对应的`__forwarding`,在找到对应的age,从而能够成功地修改和读取值了
 
-此时在外边打印age的地址值,实际上就是`__block_byref_age_0`内部的age的地址
+此时在外边打印age的地址值,实际上就是`__block_byref_age_0`内部的age的地址,即实际上外部的age就是结构体内部的age
 
 >注意点1:若block外部定义了一个可变数组array,在block内部使用方法[array addObject:@“111”],是可以的,因为其本质是将array用来使用,而不是直接修改array的指针的东西,例如array = nil,(该语句就会报错 )</br>
 >注意点2:若对象类型外部在使用`__block`修饰,则可以修改对象类型的指针变量,即可以令array = nil,其内部也会生成一个`__Block_byref_XXX`的结构体,结构体内部还会存在一个copy函数和dispose函数(因为block外部需要管理结构体对象,故需要一个copy和dispose,而结构体内部需要管理真正的对象类型,故还是需要一个copy和dispose函数)
+
+### `__block`的内存管理</br>
