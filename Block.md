@@ -143,12 +143,12 @@ ARC环境下,copy和strong都是可以的,因为在ARC环境下,对block强引�
 无论block内部对对象类型的auto变量是强引用还是弱引用,都不会持有该对象,即不会对auto变量产生强引用
 
 * 如果block被拷贝到堆上:</br>
-会调用block内部的copy函数</br>
+会调用block内部的Desc中的copy函数</br>
 copy函数内部会调用`_Block_object_assign`函数</br>
 `_Block_object_assign`函数会根据auto变量的修饰符(`__strong`,`__weak`,`__unsafe_unretained`)做出相应的操作,类似于retain(形成强引用、弱引用)
 
 * 当block从堆上移除:</br>
-会调用block内部的dispose函数</br>
+会调用block内部的Desc中的dispose函数</br>
 dispose函数内部会调用`_Block_object_dispose`函数</br>
 `_Block_object_dispose`函数会自动释放引用的auto变量,类似于release
 
