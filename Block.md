@@ -234,7 +234,6 @@ struct __Block_byref_age_0 {
 1.使用`__weak`或`__unsafe_unretained `指针</br>
 `__weak`:不会产生强引用,当指向的对象被销毁,会自动将指针置为nil</br>
 `__unsafe_unretained` :不会产生强引用,不安全,指向的对象销毁时,指针存储的地址值不变(有可能产生野指针错误)</br>
-
 2.使用`__block`,在block内部将`__block`修饰的指针置为空,且必须要执行block
 
 ```objc
