@@ -227,3 +227,27 @@ struct __Block_byref_age_0 {
 * block内部指向被`__block`包装的对象结构体的指针一定是强指针,而结构体内部的指向外部对象的指针会根据外部是强指针还是弱指针,对应的是强引用还是弱引用
 * 当栈上的block调用了copy操作,会调用block中Desc函数内部的copy函数将修饰的变量中的结构体也复制一份到堆上
 * 在MRC环境中,使用`__block`修饰的对象变量中结构体指向外部对象变量的指针始终都是弱引用(即不会进行retain操作),只有`__block`对象才会这样.比较特殊
+
+### 循环引用</br>
+解决方法:</br>
+ARC:</br>
+1.使用`__weak`或`__unsafe_unretained `指针</br>
+`__weak`:不会产生强引用,当指向的对象被销毁,会自动将指针置为nil</br>
+`__unsafe_unretained` :不会产生强引用,不安全,指向的对象销毁时,指针存储的地址值不变(有可能产生野指针错误)</br>
+
+2.使用`__block`,在block内部将`__block`修饰的指针置为空,且必须要执行block
+
+```objc
+__block MXPerson *person = [[MXPerson alloc] init];
+person.age = 10;
+person.block = ^{
+  NSLog(@"%d",person.age);
+  person = nil;
+}
+
+person.block();
+```
+
+MRC</br>
+1.因为MRC是不支持`__weak`的,所以在MRC环境中,可以使用`__unsafe_unretained`</br>
+2.可以使用__block
