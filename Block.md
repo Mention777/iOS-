@@ -188,5 +188,5 @@ struct __Block_byref_age_0 {
 
 此时在外边打印age的地址值,实际上就是`__block_byref_age_0`内部的age的地址
 
->注意点:若block外部定义了一个可变数组array,在block内部使用方法[array addObject:@“111”],是可以的,因为其本质是将array用来使用,而不是直接修改array的指针的东西,例如array = nil,(该语句就会报错 )
-
+>注意点1:若block外部定义了一个可变数组array,在block内部使用方法[array addObject:@“111”],是可以的,因为其本质是将array用来使用,而不是直接修改array的指针的东西,例如array = nil,(该语句就会报错 )</br>
+>
