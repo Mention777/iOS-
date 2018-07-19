@@ -230,7 +230,7 @@ struct __Block_byref_age_0 {
 
 ### 循环引用</br>
 解决方法:</br>
-ARC:</br>
+* ARC:</br>
 1.使用`__weak`或`__unsafe_unretained `指针</br>
 `__weak`:不会产生强引用,当指向的对象被销毁,会自动将指针置为nil</br>
 `__unsafe_unretained` :不会产生强引用,不安全,指向的对象销毁时,指针存储的地址值不变(有可能产生野指针错误)</br>
@@ -248,6 +248,6 @@ person.block = ^{
 person.block();
 ```
 
-MRC</br>
+* MRC</br>
 1.因为MRC是不支持`__weak`的,所以在MRC环境中,可以使用`__unsafe_unretained`</br>
 2.可以使用__block
