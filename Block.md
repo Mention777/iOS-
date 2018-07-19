@@ -192,3 +192,38 @@ struct __Block_byref_age_0 {
 >注意点2:若对象类型外部在使用`__block`修饰,则可以修改对象类型的指针变量,即可以令array = nil,其内部也会生成一个`__Block_byref_XXX`的结构体,结构体内部还会存在一个copy函数和dispose函数(因为block外部需要管理结构体对象,故需要一个copy和dispose,而结构体内部需要管理真正的对象类型,故还是需要一个copy和dispose函数)
 
 ### `__block`的内存管理</br>
+* 当block在栈上时,并不会对__block变量产生强引用
+* 当block被copy到堆上的时候,会调用block内部的copy函数,copy函数内部会调用`_Block_object_assign`函数,`_Block_object_assign`函数会对`__block变`量形成强引用(retain)(一般都是强引用)
+
+![](Snip20180717_22.png)
+
+当block从栈copy到堆上,会将内部用到的`__block`变量也一起拷贝到堆上,并对其进行强引用,当时`__block`修饰的对象类型,在`__block`的变量结构体被拷贝到堆上时,会调用结构体内部的copy函数对结构体里边的对象变量进行管理
+若另外一个block进行同样的操作,也使用到一样的`__block`变量,则该block拷贝到堆上的同时,对该变量进行强引用,由于之前`__block`已经在堆上了,故直接强引用就好了,不需要再次复制
+
+* 当block从堆中移除时,会调用block内部的dispose函数,dispose函数内部会调用`_Block_object_dispose`函数,`_Block_object_dispose`函数会自动释放引用的`__block变量`(release)
+
+![](Snip20180717_23.png)
+
+#### block与对象类型的auto对象变量,`__block`变量内存管理总结</br>
+* 当block在栈上时,对他们都不会产生强引用
+* 当block拷贝到堆上时,都会通过copy函数来处理它们
+* 当block从堆中移除时,都会调用dispose函数来释放
+
+使用`__block`修饰基本数据类型和直接传入OC对象的不同是:</br>
+使用`__block`修饰的对象,在block内部都是对其有着强引用的</br>
+使用OC对象传入会根据外部是强指针(`__strong`)还是弱引用(`__weak`)来决定内部对该对象是强引用还是弱引用
+
+>注:不存在`__block __weak int age`这样的写法,因为`__weak`只能用来修饰普通OC对象
+
+#### `__forwarding`指针</br>
+* 当`__block`修饰的变量在栈上时,其`__forwarding`指针指向自己
+* 当`__block`修饰的变量被拷贝到堆上时,栈上的对象中的`__forwarding`指针指向堆上的对象,堆上对象的`__forwarding`指针指向自己
+
+![](Snip20180717_25.png)
+
+这样的好处是,无论访问堆上还是栈上的`__block`对象,都能确保读取的对象一定是堆中的`__block`对象
+
+#### 被`__block`修饰的对象类型</br>
+* block内部指向被`__block`包装的对象结构体的指针一定是强指针,而结构体内部的指向外部对象的指针会根据外部是强指针还是弱指针,对应的是强引用还是弱引用
+* 当栈上的block调用了copy操作,会调用block中Desc函数内部的copy函数将修饰的变量中的结构体也复制一份到堆上
+* 在MRC环境中,使用`__block`修饰的对象变量中结构体指向外部对象变量的指针始终都是弱引用(即不会进行retain操作),只有`__block`对象才会这样.比较特殊
