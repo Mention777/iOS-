@@ -189,4 +189,4 @@ struct __Block_byref_age_0 {
 此时在外边打印age的地址值,实际上就是`__block_byref_age_0`内部的age的地址
 
 >注意点1:若block外部定义了一个可变数组array,在block内部使用方法[array addObject:@“111”],是可以的,因为其本质是将array用来使用,而不是直接修改array的指针的东西,例如array = nil,(该语句就会报错 )</br>
->
+>注意点2:若对象类型外部在使用`__block`修饰,则可以修改对象类型的指针变量,即可以令array = nil,其内部也会生成一个`__Block_byref_XXX`的结构体,结构体内部还会存在一个copy函数和dispose函数(因为block外部需要管理结构体对象,故需要一个copy和dispose,而结构体内部需要管理真正的对象类型,故还是需要一个copy和dispose函数)
