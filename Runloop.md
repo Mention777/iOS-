@@ -49,7 +49,7 @@ Mode中各个成员的含义:</br>
 
 * Timer</br>
 1.NSTimer</br>
-2.`performSelector :afterDelay`
+2.`performSelector :afterDelay`//这句代码的本质是往Runloop中添加定时器
 
 * Observers</br>
 1.监听runloop的状态</br>
