@@ -5,7 +5,8 @@ Runloop作用:</br>
 * 处理程序的各种事件(触摸事件、定时器事件等)
 * 节约CPU资源,提高程序性能
 
-程序中Main函数中的UIApplicationMain函数主要作用就是创建了一个主运行循环
+程序中Main函数中的UIApplicationMain函数主要作用就是创建了一个主运行循环</br>
+主线程几乎所有的事情都是交给了runloop去完成,比如UI界面的刷新,点击事件的处理,`performSelector`等等,但并非所有的任务都是由runloop完成
 
 Runloop有两种形式:</br>
 * OC语言-- NSRunloop
@@ -106,8 +107,6 @@ Runloop的run方法是一个无线的循环,故外部停止runloop只是停止�
 performSelector方法的waitUntilDone设置为YES,代表该语句执行完后才会执行后面的语句,设置为NO,则后面语句与该语句是一起执行的
 
 GCD只负责创建线程,不负责线程保活
-
->注:并非所有的任务都是由runloop完成
 
 ### 一个问题:</br>
 Q:保住线程的命为什么要用Runloop,用强指针不就好了?</br>
